@@ -13,20 +13,19 @@ namespace Berdin41Razmer
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class Berdin_41SizeEntities : DbContext
+    public partial class Berdin41SizeEntities : DbContext
     {
-        private static Berdin_41SizeEntities _context;
-        public static Berdin_41SizeEntities GetContext()
+        private static Berdin41SizeEntities _context;
+        public static Berdin41SizeEntities GetContext()
         {
-            if (_context == null)
-            {
-                _context = new Berdin_41SizeEntities();
+            if (_context == null){
+                _context = new Berdin41SizeEntities();
             }
             return _context;
         }
 
-        public Berdin_41SizeEntities()
-            : base("name=Berdin_41SizeEntities")
+        public Berdin41SizeEntities()
+            : base("name=Berdin41SizeEntities")
         {
         }
     
@@ -40,6 +39,7 @@ namespace Berdin41Razmer
         public virtual DbSet<PickupPoint> PickupPoint { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<Role> Role { get; set; }
+        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<User> User { get; set; }
     }
 }

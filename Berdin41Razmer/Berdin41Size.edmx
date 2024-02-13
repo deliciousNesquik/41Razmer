@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище Berdin_41SizeModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Хранилище Berdin41SizeModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Order">
           <Key>
             <PropertyRef Name="OrderID" />
@@ -13,9 +13,7 @@
           <Property Name="OrderDate" Type="date" />
           <Property Name="OrderDeliveryDate" Type="date" Nullable="false" />
           <Property Name="OrderPunkt" Type="int" />
-          <Property Name="OrderName" Type="nvarchar(max)" />
-          <Property Name="OrderSecondName" Type="nvarchar(max)" />
-          <Property Name="OrderOtchestvo" Type="nvarchar(max)" />
+          <Property Name="OrderClientID" Type="int" />
           <Property Name="OrderPickupPoint" Type="int" Nullable="false" />
           <Property Name="OrderStatus" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
@@ -62,6 +60,16 @@
           <Property Name="UserRole" Type="int" Nullable="false" />
           <Property Name="UserRoleName" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="UserID" />
@@ -98,6 +106,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Order_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="OrderClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_OrderProduct_Product">
           <End Role="Product" Type="Self.Product" Multiplicity="1" />
           <End Role="OrderProduct" Type="Self.OrderProduct" Multiplicity="*" />
@@ -122,12 +142,13 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="Хранилище Berdin_41SizeModelContainer">
+        <EntityContainer Name="Хранилище Berdin41SizeModelContainer">
           <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderProduct" EntityType="Self.OrderProduct" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PickupPoint" EntityType="Self.PickupPoint" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__OrderProd__Order__2D27B809" Association="Self.FK__OrderProd__Order__2D27B809">
             <End Role="Order" EntitySet="Order" />
@@ -135,6 +156,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_Order_PickupPoint" Association="Self.FK_Order_PickupPoint">
             <End Role="PickupPoint" EntitySet="PickupPoint" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_User" Association="Self.FK_Order_User">
+            <End Role="User" EntitySet="User" />
             <End Role="Order" EntitySet="Order" />
           </AssociationSet>
           <AssociationSet Name="FK_OrderProduct_Product" Association="Self.FK_OrderProduct_Product">
@@ -150,7 +175,7 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="Berdin_41SizeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="Berdin41SizeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Order">
           <Key>
             <PropertyRef Name="OrderID" />
@@ -159,13 +184,12 @@
           <Property Name="OrderDate" Type="DateTime" Precision="0" />
           <Property Name="OrderDeliveryDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="OrderPunkt" Type="Int32" />
-          <Property Name="OrderName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="OrderSecondName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="OrderOtchestvo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OrderClientID" Type="Int32" />
           <Property Name="OrderPickupPoint" Type="Int32" Nullable="false" />
           <Property Name="OrderStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="OrderProduct" Relationship="Self.FK__OrderProd__Order__2D27B809" FromRole="Order" ToRole="OrderProduct" />
           <NavigationProperty Name="PickupPoint" Relationship="Self.FK_Order_PickupPoint" FromRole="Order" ToRole="PickupPoint" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Order_User" FromRole="Order" ToRole="User" />
         </EntityType>
         <EntityType Name="OrderProduct">
           <Key>
@@ -215,6 +239,16 @@
           <Property Name="UserRoleName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="User" Relationship="Self.FK_User_UserRole" FromRole="Role" ToRole="User" />
         </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="UserID" />
@@ -226,6 +260,7 @@
           <Property Name="UserLogin" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="UserPassword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="UserRole" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_Order_User" FromRole="User" ToRole="Order" />
           <NavigationProperty Name="Role" Relationship="Self.FK_User_UserRole" FromRole="User" ToRole="Role" />
         </EntityType>
         <Association Name="FK__OrderProd__Order__2D27B809">
@@ -249,6 +284,18 @@
             </Principal>
             <Dependent Role="Order">
               <PropertyRef Name="OrderPunkt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="OrderClientID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -276,12 +323,13 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="Berdin_41SizeEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="Berdin41SizeEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Order" EntityType="Self.Order" />
           <EntitySet Name="OrderProduct" EntityType="Self.OrderProduct" />
           <EntitySet Name="PickupPoint" EntityType="Self.PickupPoint" />
           <EntitySet Name="Product" EntityType="Self.Product" />
           <EntitySet Name="Role" EntityType="Self.Role" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="User" EntityType="Self.User" />
           <AssociationSet Name="FK__OrderProd__Order__2D27B809" Association="Self.FK__OrderProd__Order__2D27B809">
             <End Role="Order" EntitySet="Order" />
@@ -289,6 +337,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_Order_PickupPoint" Association="Self.FK_Order_PickupPoint">
             <End Role="PickupPoint" EntitySet="PickupPoint" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_User" Association="Self.FK_Order_User">
+            <End Role="User" EntitySet="User" />
             <End Role="Order" EntitySet="Order" />
           </AssociationSet>
           <AssociationSet Name="FK_OrderProduct_Product" Association="Self.FK_OrderProduct_Product">
@@ -305,24 +357,22 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Хранилище Berdin_41SizeModelContainer" CdmEntityContainer="Berdin_41SizeEntities">
+        <EntityContainerMapping StorageEntityContainer="Хранилище Berdin41SizeModelContainer" CdmEntityContainer="Berdin41SizeEntities">
           <EntitySetMapping Name="Order">
-            <EntityTypeMapping TypeName="Berdin_41SizeModel.Order">
+            <EntityTypeMapping TypeName="Berdin41SizeModel.Order">
               <MappingFragment StoreEntitySet="Order">
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
                 <ScalarProperty Name="OrderDeliveryDate" ColumnName="OrderDeliveryDate" />
                 <ScalarProperty Name="OrderPunkt" ColumnName="OrderPunkt" />
-                <ScalarProperty Name="OrderName" ColumnName="OrderName" />
-                <ScalarProperty Name="OrderSecondName" ColumnName="OrderSecondName" />
-                <ScalarProperty Name="OrderOtchestvo" ColumnName="OrderOtchestvo" />
+                <ScalarProperty Name="OrderClientID" ColumnName="OrderClientID" />
                 <ScalarProperty Name="OrderPickupPoint" ColumnName="OrderPickupPoint" />
                 <ScalarProperty Name="OrderStatus" ColumnName="OrderStatus" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="OrderProduct">
-            <EntityTypeMapping TypeName="Berdin_41SizeModel.OrderProduct">
+            <EntityTypeMapping TypeName="Berdin41SizeModel.OrderProduct">
               <MappingFragment StoreEntitySet="OrderProduct">
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="ProductArticleNumber" ColumnName="ProductArticleNumber" />
@@ -331,7 +381,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PickupPoint">
-            <EntityTypeMapping TypeName="Berdin_41SizeModel.PickupPoint">
+            <EntityTypeMapping TypeName="Berdin41SizeModel.PickupPoint">
               <MappingFragment StoreEntitySet="PickupPoint">
                 <ScalarProperty Name="PickupPoint_ID" ColumnName="PickupPoint_ID" />
                 <ScalarProperty Name="PickupPoint_Index" ColumnName="PickupPoint_Index" />
@@ -342,7 +392,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Product">
-            <EntityTypeMapping TypeName="Berdin_41SizeModel.Product">
+            <EntityTypeMapping TypeName="Berdin41SizeModel.Product">
               <MappingFragment StoreEntitySet="Product">
                 <ScalarProperty Name="ProductArticleNumber" ColumnName="ProductArticleNumber" />
                 <ScalarProperty Name="ProductName" ColumnName="ProductName" />
@@ -360,15 +410,26 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Role">
-            <EntityTypeMapping TypeName="Berdin_41SizeModel.Role">
+            <EntityTypeMapping TypeName="Berdin41SizeModel.Role">
               <MappingFragment StoreEntitySet="Role">
                 <ScalarProperty Name="UserRole" ColumnName="UserRole" />
                 <ScalarProperty Name="UserRoleName" ColumnName="UserRoleName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Berdin41SizeModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="User">
-            <EntityTypeMapping TypeName="Berdin_41SizeModel.User">
+            <EntityTypeMapping TypeName="Berdin41SizeModel.User">
               <MappingFragment StoreEntitySet="User">
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="UserSurname" ColumnName="UserSurname" />

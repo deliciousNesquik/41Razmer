@@ -24,48 +24,49 @@ namespace Berdin41Razmer
         {
             InitializeComponent();
 
-            var currentAgent = Berdin_41SizeEntities.GetContext().Product.ToList();
-            ProductListView.ItemsSource = currentAgent;
+            var currentProduct = Berdin41SizeEntities.GetContext().Product.ToList();
+            ProductListView.ItemsSource = currentProduct;
+
+            DiscountFilter.SelectedIndex = 0;
+            TBoxSearch.Text = "";
+
+
         }
 
-        private void ComboSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void Update()
         {
+            var currentProduct = Berdin41SizeEntities.GetContext().Product.ToList();
 
-        }
+            if (UpCost.IsChecked.Value)
+            {
+                currentProduct = currentProduct.OrderBy(p => p.ProductCost).ToList();
+            }
+            if (DownCost.IsChecked.Value)
+            {
+                currentProduct = currentProduct.OrderByDescending(p => p.ProductCost).ToList();
+            }
 
-        private void ComboFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
+            ProductListView.ItemsSource = currentProduct;
         }
 
         private void TBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+            Update();
         }
 
-        private void EditButton_Click(object sender, RoutedEventArgs e)
+        private void DiscountFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            Update();
         }
 
-        private void AddButton_Click(object sender, RoutedEventArgs e)
+        private void UpCost_Checked(object sender, RoutedEventArgs e)
         {
-
+            Update();
         }
 
-        private void LeftDirButton_Click(object sender, RoutedEventArgs e)
+        private void DownCost_Checked(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void PageListBox_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void RightDirButton_Click(object sender, RoutedEventArgs e)
-        {
-
+            Update();
         }
     }
 }

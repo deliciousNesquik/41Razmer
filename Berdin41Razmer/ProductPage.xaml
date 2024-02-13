@@ -15,6 +15,33 @@
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
 
+        <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Name="CountObject" Text="Кол-во 0 из 0" FontSize="20" VerticalAlignment="Top" HorizontalAlignment="Left"></TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="10,0,0,0">
+                <TextBlock Text="поиск по наименованию" FontSize="20"></TextBlock>
+                <TextBox Name="TBoxSearch" TextChanged="TBoxSearch_TextChanged" Width="240" HorizontalAlignment="Left"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="10,0,0,0">
+                <StackPanel Orientation="Vertical">
+                    <RadioButton Name="UpCost" Content="по возрастанию стоимости" VerticalAlignment="Center" FontSize="20" Checked="UpCost_Checked"></RadioButton>
+                    <RadioButton Name="DownCost" Content="по убыванию стоимости" VerticalAlignment="Center" FontSize="20" Checked="DownCost_Checked"></RadioButton>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="10,0,0,0">
+                <TextBlock Text="фильтрация по скидке" FontSize="20"></TextBlock>
+                <ComboBox Name="DiscountFilter" SelectionChanged="DiscountFilter_SelectionChanged" Width="220" HorizontalAlignment="Left">
+                    <TextBlock>Без фильтра</TextBlock>
+                    <TextBlock>0-9,99%</TextBlock>
+                    <TextBlock>10-14,99%</TextBlock>
+                    <TextBlock>15% и более</TextBlock>
+                </ComboBox>
+            </StackPanel>
+        </StackPanel>
+
+        
+
         <ListView Name ="ProductListView" Grid.Row="1" >
             <ListView.ItemTemplate>
                 <DataTemplate>
