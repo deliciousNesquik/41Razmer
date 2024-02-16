@@ -21,7 +21,7 @@ namespace Berdin41Razmer
     public partial class ProductPage : Page
     {
         string CountObjectAll;
-        public ProductPage()
+        public ProductPage(User user)
         {
             InitializeComponent();
 
