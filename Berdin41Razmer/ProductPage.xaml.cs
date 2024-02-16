@@ -21,9 +21,11 @@ namespace Berdin41Razmer
     public partial class ProductPage : Page
     {
         string CountObjectAll;
-        public ProductPage(User user)
+        User user;
+        public ProductPage(User _user)
         {
             InitializeComponent();
+            user = _user;
 
             var currentProduct = Berdin41SizeEntities.GetContext().Product.ToList();
             ProductListView.ItemsSource = currentProduct;
@@ -103,6 +105,13 @@ namespace Berdin41Razmer
         private void DownCost_Checked(object sender, RoutedEventArgs e)
         {
             Update();
+        }
+
+        private void AddOrder_Click(object sender, RoutedEventArgs e)
+        {
+            OrderWindow orderWindow = new OrderWindow();
+            orderWindow.client.Text = user.UserSurname + " " + user.UserName + " " + user.UserPatronymic;
+
         }
     }
 }

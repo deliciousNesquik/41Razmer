@@ -33,11 +33,13 @@ namespace Berdin41Razmer
         private void SignGhost_Click(object sender, RoutedEventArgs e)
         {
             Manager.MainFrame.Navigate(new ProductPage(null));
+            Login.Text = "";
+            Password.Text = "";
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            Login.IsEnabled = true; // Включить TextBox
+            Sign.IsEnabled = true; // Включить TextBox
             timer.Stop(); // Остановить таймер
         }
 
@@ -63,7 +65,7 @@ namespace Berdin41Razmer
                 else
                 {
                     MessageBox.Show("Введены неверные данные!", "Ошибка");
-                    Login.IsEnabled = false;
+                    Sign.IsEnabled = false;
                     timer.Start(); // Запустить таймер
                 }
             }
