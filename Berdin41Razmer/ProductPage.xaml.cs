@@ -20,12 +20,15 @@ namespace Berdin41Razmer
     /// </summary>
     public partial class ProductPage : Page
     {
+        string CountObjectAll;
         public ProductPage()
         {
             InitializeComponent();
 
             var currentProduct = Berdin41SizeEntities.GetContext().Product.ToList();
             ProductListView.ItemsSource = currentProduct;
+            CountObjectAll = Convert.ToString(currentProduct.Count);
+            CountObject.Text = "Кол-во " + Convert.ToString(currentProduct.Count) + " из " + CountObjectAll;
 
             DiscountFilter.SelectedIndex = 0;
             TBoxSearch.Text = "";
@@ -36,6 +39,7 @@ namespace Berdin41Razmer
         public void Update()
         {
             var currentProduct = Berdin41SizeEntities.GetContext().Product.ToList();
+            currentProduct = currentProduct.Where(p => (p.ProductName.ToLower().Contains(TBoxSearch.Text.ToLower()))).ToList();
 
             if (UpCost.IsChecked.Value)
             {
@@ -45,7 +49,20 @@ namespace Berdin41Razmer
             {
                 currentProduct = currentProduct.OrderByDescending(p => p.ProductCost).ToList();
             }
+            if (DiscountFilter.SelectedIndex == 1)
+            {
+                currentProduct = currentProduct.Where(p => Int32.Parse(p.SkidkaDeystv) > 0 && Int32.Parse(p.SkidkaDeystv) <= 9.99).ToList();
+            }
+            if (DiscountFilter.SelectedIndex == 2)
+            {
+                currentProduct = currentProduct.Where(p => Int32.Parse(p.SkidkaDeystv) > 10 && Int32.Parse(p.SkidkaDeystv) <= 14.99).ToList();
+            }
+            if (DiscountFilter.SelectedIndex == 3)
+            {
+                currentProduct = currentProduct.Where(p => Int32.Parse(p.SkidkaDeystv) > 15).ToList();
+            }
 
+            CountObject.Text = "Кол-во " + (Convert.ToString(currentProduct.Count)) + " из " + CountObjectAll;
             ProductListView.ItemsSource = currentProduct;
         }
 
