@@ -32,7 +32,7 @@ namespace Berdin41Razmer
 
         private void SignGhost_Click(object sender, RoutedEventArgs e)
         {
-
+            Manager.MainFrame.Navigate(new ProductPage(null));
         }
 
         private void Timer_Tick(object sender, EventArgs e)

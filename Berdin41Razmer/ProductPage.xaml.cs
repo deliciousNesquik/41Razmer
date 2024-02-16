@@ -33,7 +33,26 @@ namespace Berdin41Razmer
             DiscountFilter.SelectedIndex = 0;
             TBoxSearch.Text = "";
 
-
+            if(user == null)
+            {
+                authuser.Text = "Вы авторизованы как гость";
+                authuserrole.Text = "Роль: Гость";
+            }
+            else
+            {
+                authuser.Text = "Вы авторизованы как " + user.UserSurname + " " + user.UserName + " " + user.UserPatronymic;
+                switch (user.UserRole)
+                {
+                    case 2:
+                        authuserrole.Text = "Роль: " + "Клиент"; break;
+                    case 3:
+                        authuserrole.Text = "Роль: " + "Менеджер"; break;
+                    case 1:
+                        authuserrole.Text = "Роль: " + "Администратор"; break;
+                    default:
+                        break;
+                }
+            }
         }
 
         public void Update()
